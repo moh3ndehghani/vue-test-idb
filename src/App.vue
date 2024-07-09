@@ -2,9 +2,10 @@
 import IndexDb from "@/services"
 
 
-function createDB(dbName) {
+async function createDB(dbName) {
   let t = new IndexDb(dbName)
-  console.log(t)
+  await t.connectDB()
+  console.log(t);
 }
 </script>
 
