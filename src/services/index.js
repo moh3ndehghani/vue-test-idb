@@ -2,6 +2,7 @@ class IndexDb {
   database = null;
   dbName = null;
   version;
+  openReq;
   constructor(dbName, version) {
     this.dbName = dbName;
 
@@ -16,17 +17,30 @@ class IndexDb {
 
   connectDB() {
     return new Promise((resolve, reject) => {
-      const openRequest = indexedDB.open(this.dbName);
+      this.openReq = indexedDB.open(this.dbName);
 
-      openRequest.onsuccess = function (event) {
+      this.openReq.onsuccess = function (event) {
+        console.log("hjhhh:", event.target.result);
         this.database = event.target.result;
         resolve(this.database);
       }.bind(this);
 
-      openRequest.onerror = function (event) {
+      this.openReq.onerror = function (event) {
         reject(event);
       }.bind(this);
+
+      this.openReq.onupgradeneeded = function (event) {
+        this.database = event.target.result;
+        // this.database.createObjectStore("users", { keyPath: "id" });
+      }.bind(this);
     });
+  }
+
+  createTable(tableName, config) {
+    // this.openReq.onupgradeneeded = function (event) {
+    //   console.log("event ===", event);
+    this.database.createObjectStore(tableName, config);
+    // }.bind(this);
   }
 
   #increaseVersion() {
