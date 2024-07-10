@@ -5,7 +5,6 @@ import IndexDb from "@/services"
 async function createDB(dbName) {
   let t = new IndexDb(dbName)
   await t.connectDB()
-  console.log(t);
 }
 </script>
 
