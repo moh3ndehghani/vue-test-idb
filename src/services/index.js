@@ -2,13 +2,12 @@ class IndexDb {
   database = null;
   dbName = null;
   version;
-  openReq;
   constructor(dbName, version) {
     this.dbName = dbName;
 
     if (!version) {
       const currentVersion = localStorage.getItem(`${this.dbName}-version`);
-      version = currentVersion ? JSON.parse(currentVersion) + 1 : 1;
+      version = currentVersion ? JSON.parse(currentVersion) : 1;
     }
 
     localStorage.setItem(`${dbName}-version`, version);
@@ -17,39 +16,38 @@ class IndexDb {
 
   connectDB() {
     return new Promise((resolve, reject) => {
-      this.openReq = indexedDB.open(this.dbName);
+      const request = indexedDB.open(this.dbName);
 
-      this.openReq.onsuccess = function (event) {
+      request.onsuccess = (event) => {
         this.database = event.target.result;
+        console.log("hhh", Object.assign({}, event.target));
         resolve(this.database);
-      }.bind(this);
+      };
 
-      this.openReq.onerror = function (event) {
+      request.onerror = (event) => {
         reject(event);
-      }.bind(this);
-
-      // this.openReq.onupgradeneeded = function (event) {}.bind(this);
+      };
     });
   }
 
   createTable(tableName, config) {
-    return new Promise((resolve, reject) => {
-      const transaction = this.database.transaction(tableName, "readwrite");
-    });
+    console.log(Object.assign(this.database));
+    // return new Promise((resolve, reject) => {
+    //   const request = indexedDB.open(this.dbName);
 
-    // const objectStore = transaction.objectStore(tableName);
+    //   request.onsuccess = function (event) {
+    //     this.database = event.target.result;
+    //     resolve(this.database);
+    //   };
 
-    // transaction.oncomplete = () => {
-    //   resolve(`Table '${tableName}' created successfully.`, objectStore);
-    // };
+    //   request.onerror = function (event) {
+    //     reject(event);
+    //   };
 
-    // transaction.onerror = (event) => {
-    //   reject(`Error creating table '${tableName}': ${event.target.error}`);
-    // };
-    // this.openReq.onupgradeneeded = function (event) {
-    //   console.log("event ===", event);
-    //   this.database.createObjectStore(tableName, config);
-    // }.bind(this);
+    //   request.onupgradeneeded = function (event) {
+
+    //   };
+    // });
   }
 
   // #increaseVersion() {

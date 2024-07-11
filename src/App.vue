@@ -1,18 +1,16 @@
 <script setup>
-import IndexDb from "@/services"
-
+import IndexDb from "@/services";
 
 async function createDB(dbName) {
-  let t = new IndexDb(dbName)
-  await t.connectDB()
+  // let t = new IndexDb(dbName);
+  // await t.connectDB();
 }
 
 async function addTable(dbName, tableName) {
-  let t = new IndexDb(dbName)
-  await t.connectDB()
-  t.createTable(tableName, { keyPath: "id" })
+  let t = new IndexDb(dbName);
+  await t.connectDB();
+  await t.createTable(tableName, { keyPath: "id" });
 }
-
 </script>
 
 <template>
