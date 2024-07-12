@@ -14,40 +14,40 @@ class IndexDb {
     this.version = version;
   }
 
-  connectDB() {
+  connectDB(update) {
     return new Promise((resolve, reject) => {
       const request = indexedDB.open(this.dbName);
 
       request.onsuccess = (event) => {
-        this.database = event.target.result;
-        console.log("hhh", Object.assign({}, event.target));
-        resolve(this.database);
+        resolve(request);
       };
 
       request.onerror = (event) => {
         reject(event);
       };
+
+      request.onupgradeneeded = (event) => {
+        this.database = event.target.result;
+        update();
+      };
     });
   }
 
-  createTable(tableName, config) {
-    console.log(Object.assign(this.database));
-    // return new Promise((resolve, reject) => {
-    //   const request = indexedDB.open(this.dbName);
-
-    //   request.onsuccess = function (event) {
-    //     this.database = event.target.result;
-    //     resolve(this.database);
-    //   };
-
-    //   request.onerror = function (event) {
-    //     reject(event);
-    //   };
-
-    //   request.onupgradeneeded = function (event) {
-
-    //   };
-    // });
+  createTable(tableName, tableConfig, columns) {
+    return new Promise((resolve, reject) => {
+      const objectStore = this.database.createObjectStore(
+        tableName,
+        tableConfig
+      );
+      for (let item of columns) {
+        objectStore.createIndex(
+          item["indexName"],
+          item["keyPath"],
+          item["options"]
+        );
+      }
+      resolve(objectStore);
+    });
   }
 
   // #increaseVersion() {
