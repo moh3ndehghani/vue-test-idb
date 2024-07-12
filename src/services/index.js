@@ -50,10 +50,10 @@ class IndexDb {
     });
   }
 
-  // #increaseVersion() {
-  //   this.version = this.version + 1;
-  //   localStorage.setItem(`${this.dbName}-version`, this.version);
-  // }
+  #increaseVersion() {
+    this.version = this.version + 1;
+    localStorage.setItem(`${this.dbName}-version`, this.version);
+  }
 }
 
 export default IndexDb;
