@@ -16,9 +16,10 @@ class IndexDb {
 
   connectDB(update) {
     return new Promise((resolve, reject) => {
-      const request = indexedDB.open(this.dbName);
+      const request = indexedDB.open(this.dbName , this.version);
 
       request.onsuccess = (event) => {
+        this.database = event.target.result;
         resolve(request);
       };
 
@@ -30,6 +31,10 @@ class IndexDb {
         this.database = event.target.result;
         update();
       };
+
+      request.onversionchange = (event) => {
+        console.log("event version changed ===" , event)
+      }
     });
   }
 
@@ -48,6 +53,21 @@ class IndexDb {
       }
       resolve(objectStore);
     });
+  }
+
+   insertData(tableName , data , options){
+    return new Promise((resolve , reject) => {
+      const transaction = this.database.transaction(tableName , 'readwrite' , options)
+      const store = transaction.objectStore(tableName)
+      console.log(store)
+      store.add(data)
+      transaction.oncomplete = (event) => {
+        this.version = this.version + 1;
+    localStorage.setItem(`${this.dbName}-version`, this.version);
+        console.log("event ===" , event)
+        resolve(event)
+      }
+    })
   }
 
   #increaseVersion() {
