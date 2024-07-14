@@ -62,8 +62,6 @@ class IndexDb {
       console.log(store)
       store.add(data)
       transaction.oncomplete = (event) => {
-        this.version = this.version + 1;
-    localStorage.setItem(`${this.dbName}-version`, this.version);
         console.log("event ===" , event)
         resolve(event)
       }

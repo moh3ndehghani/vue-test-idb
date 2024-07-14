@@ -11,7 +11,7 @@ async function createDB(dbName) {
   state.idb = new IndexDb(dbName);
   await state.idb.connectDB(async function update() {
     const columns = [
-      { indexName: "username", keyPath: "username", options: { unique: true } },
+      { indexName: "username", keyPath: "username", options: { unique: false } },
       {
         indexName: "firstName",
         keyPath: "firstName",
@@ -22,7 +22,7 @@ async function createDB(dbName) {
         keyPath: "lastName",
         options: { unique: false },
       },
-      { indexName: "email", keyPath: "email", options: { unique: true } },
+      { indexName: "email", keyPath: "email", options: { unique: false } },
     ];
     await state.idb.createTable("users", { keyPath: "id" }, columns);
   });
@@ -30,7 +30,7 @@ async function createDB(dbName) {
 }
 
 async function add() {
-  await state.idb.insertData("users", { id: 10, username: "mohssednhagdhsani", firstName: "mohsen", lastName: "dehghani", email: "m@g.com" })
+  await state.idb.insertData("users", { username: "mohssednhaagdhsansi", firstName: "mohsen", lastName: "dehghani", email: "msas@g.com" })
 }
 
 
