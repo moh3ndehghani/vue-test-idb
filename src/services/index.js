@@ -55,12 +55,12 @@ class IndexDb {
     });
   }
 
-   insertData(tableName , data , options){
+  insertData(tableName , data , options={}){
     return new Promise((resolve , reject) => {
       const transaction = this.database.transaction(tableName , 'readwrite' , options)
       const store = transaction.objectStore(tableName)
       const addResponse = store.add(data)
-      addResponse.oncomplete = (event) => {
+      addResponse.onsuccess = (event) => {
         console.log("event ===" , event)
         resolve(event)
       }
@@ -70,6 +70,24 @@ class IndexDb {
       }
     })
   }
+
+  removeData(tableName , key , options={}){
+    return new Promise((resolve , reject) => {
+      const transaction = this.database.transaction(tableName , 'readwrite' , options)
+      const store = transaction.objectStore(tableName)
+      const removeResponse = store.delete(key)
+      removeResponse.onsuccess = (event) => {
+        console.log("event ===" , event)
+        resolve(event)
+      }
+      removeResponse.onerror = (event) => {
+        console.log("error ===" , event)
+        reject(event)
+      }
+    })
+  }
+
+
 
   #increaseVersion() {
     this.version = this.version + 1;

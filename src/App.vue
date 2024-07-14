@@ -33,6 +33,10 @@ async function add() {
   await state.idb.insertData("users", { username: "mohssednhaagdhsansi", firstName: "mohsen", lastName: "dehghani", email: "msas@g.com" })
 }
 
+async function remove() {
+  await state.idb.removeData("users", 1)
+}
+
 
 onMounted(async () => {
   await createDB('test-db')
@@ -43,5 +47,6 @@ onMounted(async () => {
   <div>
     <button @click="createDB('test-db')">create db</button>
     <button @click="add()">add record</button>
+    <button @click="remove()">remove record</button>
   </div>
 </template>
