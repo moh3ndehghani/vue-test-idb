@@ -24,7 +24,7 @@ async function createDB(dbName) {
       },
       { indexName: "email", keyPath: "email", options: { unique: false } },
     ];
-    await state.idb.createTable("users", { keyPath: "id" }, columns);
+    await state.idb.createTable("users", { keyPath: "id", autoIncrement: true }, columns);
   });
 
 }

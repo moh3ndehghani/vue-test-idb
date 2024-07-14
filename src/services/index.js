@@ -59,11 +59,14 @@ class IndexDb {
     return new Promise((resolve , reject) => {
       const transaction = this.database.transaction(tableName , 'readwrite' , options)
       const store = transaction.objectStore(tableName)
-      console.log(store)
-      store.add(data)
-      transaction.oncomplete = (event) => {
+      const addResponse = store.add(data)
+      addResponse.oncomplete = (event) => {
         console.log("event ===" , event)
         resolve(event)
+      }
+      addResponse.onerror = (event) => {
+        console.log("error ===" , event)
+        reject(event)
       }
     })
   }
