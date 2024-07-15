@@ -95,6 +95,17 @@ class IndexDb {
     });
   }
 
+  editData(tableName, newData, options = {}) {
+    return new Promise((resolve, reject) => {
+      const transaction = this.database.transaction(
+        tableName,
+        "readwrite",
+        options
+      );
+      const store = transaction.objectStore(tableName);
+    });
+  }
+
   #increaseVersion() {
     this.version = this.version + 1;
     localStorage.setItem(`${this.dbName}-version`, this.version);
