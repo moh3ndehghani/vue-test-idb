@@ -95,14 +95,34 @@ class IndexDb {
     });
   }
 
-  editData(tableName, newData, options = {}) {
+  editData(tableName, key, newData, options = {}) {
+    return new Promise((resolve, reject) => {
+      // const transaction = this.database.transaction(
+      //   tableName,
+      //   "readwrite",
+      //   options
+      // );
+      // const store = transaction.objectStore(tableName);
+    });
+  }
+
+  getData(tableName, key, options = {}) {
     return new Promise((resolve, reject) => {
       const transaction = this.database.transaction(
         tableName,
-        "readwrite",
+        "readonly",
         options
       );
       const store = transaction.objectStore(tableName);
+      const getResponse = store.get(key);
+      getResponse.onsuccess = (event) => {
+        console.log("get event ===", event);
+        resolve(event);
+      };
+      getResponse.onerror = (event) => {
+        console.log("get error ===", event);
+        reject(event);
+      };
     });
   }
 
