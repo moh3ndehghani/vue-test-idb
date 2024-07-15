@@ -1,17 +1,21 @@
 <script setup>
 import IndexDb from "@/services";
 
-import { reactive, onMounted } from "vue"
+import { reactive, onMounted } from "vue";
 
 const state = reactive({
-  idb: null
-})
+  idb: null,
+});
 
 async function createDB(dbName) {
   state.idb = new IndexDb(dbName);
   await state.idb.connectDB(async function update() {
     const columns = [
-      { indexName: "username", keyPath: "username", options: { unique: false } },
+      {
+        indexName: "username",
+        keyPath: "username",
+        options: { unique: false },
+      },
       {
         indexName: "firstName",
         keyPath: "firstName",
@@ -24,23 +28,30 @@ async function createDB(dbName) {
       },
       { indexName: "email", keyPath: "email", options: { unique: false } },
     ];
-    await state.idb.createTable("users", { keyPath: "id", autoIncrement: true }, columns);
+    await state.idb.createTable(
+      "users",
+      { keyPath: "id", autoIncrement: true },
+      columns
+    );
   });
-
 }
 
 async function add() {
-  await state.idb.insertData("users", { username: "mohssednhaagdhsansi", firstName: "mohsen", lastName: "dehghani", email: "msas@g.com" })
+  await state.idb.insertData("users", {
+    username: "mohssednhaagdhsansi",
+    firstName: "mohsen",
+    lastName: "dehghani",
+    email: "msas@g.com",
+  });
 }
 
 async function remove() {
-  await state.idb.removeData("users", 1)
+  await state.idb.removeData("users", 812);
 }
 
-
 onMounted(async () => {
-  await createDB('test-db')
-})
+  await createDB("test-db");
+});
 </script>
 
 <template>

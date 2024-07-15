@@ -16,7 +16,7 @@ class IndexDb {
 
   connectDB(update) {
     return new Promise((resolve, reject) => {
-      const request = indexedDB.open(this.dbName , this.version);
+      const request = indexedDB.open(this.dbName, this.version);
 
       request.onsuccess = (event) => {
         this.database = event.target.result;
@@ -33,8 +33,8 @@ class IndexDb {
       };
 
       request.onversionchange = (event) => {
-        console.log("event version changed ===" , event)
-      }
+        console.log("event version changed ===", event);
+      };
     });
   }
 
@@ -55,39 +55,45 @@ class IndexDb {
     });
   }
 
-  insertData(tableName , data , options={}){
-    return new Promise((resolve , reject) => {
-      const transaction = this.database.transaction(tableName , 'readwrite' , options)
-      const store = transaction.objectStore(tableName)
-      const addResponse = store.add(data)
+  insertData(tableName, data, options = {}) {
+    return new Promise((resolve, reject) => {
+      const transaction = this.database.transaction(
+        tableName,
+        "readwrite",
+        options
+      );
+      const store = transaction.objectStore(tableName);
+      const addResponse = store.add(data);
       addResponse.onsuccess = (event) => {
-        console.log("event ===" , event)
-        resolve(event)
-      }
+        console.log("event ===", event);
+        resolve(event);
+      };
       addResponse.onerror = (event) => {
-        console.log("error ===" , event)
-        reject(event)
-      }
-    })
+        console.log("error ===", event);
+        reject(event);
+      };
+    });
   }
 
-  removeData(tableName , key , options={}){
-    return new Promise((resolve , reject) => {
-      const transaction = this.database.transaction(tableName , 'readwrite' , options)
-      const store = transaction.objectStore(tableName)
-      const removeResponse = store.delete(key)
+  removeData(tableName, key, options = {}) {
+    return new Promise((resolve, reject) => {
+      const transaction = this.database.transaction(
+        tableName,
+        "readwrite",
+        options
+      );
+      const store = transaction.objectStore(tableName);
+      const removeResponse = store.delete(key);
       removeResponse.onsuccess = (event) => {
-        console.log("event ===" , event)
-        resolve(event)
-      }
+        console.log("remove event ===", event);
+        resolve(event);
+      };
       removeResponse.onerror = (event) => {
-        console.log("error ===" , event)
-        reject(event)
-      }
-    })
+        console.log("remove error ===", event);
+        reject(event);
+      };
+    });
   }
-
-
 
   #increaseVersion() {
     this.version = this.version + 1;
