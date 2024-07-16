@@ -46,9 +46,23 @@ async function add() {
 }
 
 async function remove() {
-  const data = await state.idb.getData("users", 13);
+  await state.idb.removeData("users", 812);
+}
 
-  console.log("data ===", data);
+async function get() {
+  const data = await state.idb.getData("users", 1);
+  console.log(data);
+}
+
+async function edit() {
+  const newData = {
+    username: "d",
+    firstName: "m",
+    lastName: "d",
+    email: "m@g.com",
+    id: 2,
+  };
+  await state.idb.editData("users", newData);
 }
 
 onMounted(async () => {
@@ -61,5 +75,7 @@ onMounted(async () => {
     <button @click="createDB('test-db')">create db</button>
     <button @click="add()">add record</button>
     <button @click="remove()">remove record</button>
+    <button @click="get()">get data</button>
+    <button @click="edit()">update data</button>
   </div>
 </template>

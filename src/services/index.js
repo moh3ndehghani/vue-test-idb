@@ -95,14 +95,25 @@ class IndexDb {
     });
   }
 
-  editData(tableName, key, newData, options = {}) {
+  editData(tableName, newData, options = {}) {
     return new Promise((resolve, reject) => {
-      // const transaction = this.database.transaction(
-      //   tableName,
-      //   "readwrite",
-      //   options
-      // );
-      // const store = transaction.objectStore(tableName);
+      // id must exist
+      // const currentData = this.getData(tableName , newData.id)
+      const transaction = this.database.transaction(
+        tableName,
+        "readwrite",
+        options
+      );
+      const store = transaction.objectStore(tableName);
+      const editResponse = store.put(newData);
+      editResponse.onsuccess = (event) => {
+        console.log("edit event ===", event);
+        resolve(event.target.result);
+      };
+      editResponse.onerror = (event) => {
+        console.log("edit error ===", event);
+        reject(event);
+      };
     });
   }
 
@@ -116,7 +127,7 @@ class IndexDb {
       const store = transaction.objectStore(tableName);
       const getResponse = store.get(key);
       getResponse.onsuccess = (event) => {
-        console.log("get event ===", event.target);
+        console.log("get event ===", event);
         resolve(event.target.result);
       };
       getResponse.onerror = (event) => {
