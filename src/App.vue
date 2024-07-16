@@ -46,7 +46,9 @@ async function add() {
 }
 
 async function remove() {
-  await state.idb.removeData("users", 812);
+  const data = await state.idb.getData("users", 13);
+
+  console.log("data ===", data);
 }
 
 onMounted(async () => {

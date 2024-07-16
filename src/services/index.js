@@ -66,7 +66,7 @@ class IndexDb {
       const addResponse = store.add(data);
       addResponse.onsuccess = (event) => {
         console.log("event ===", event);
-        resolve(event);
+        resolve(event.target.result);
       };
       addResponse.onerror = (event) => {
         console.log("error ===", event);
@@ -86,7 +86,7 @@ class IndexDb {
       const removeResponse = store.delete(key);
       removeResponse.onsuccess = (event) => {
         console.log("remove event ===", event);
-        resolve(event);
+        resolve(event.target.result);
       };
       removeResponse.onerror = (event) => {
         console.log("remove error ===", event);
@@ -116,8 +116,8 @@ class IndexDb {
       const store = transaction.objectStore(tableName);
       const getResponse = store.get(key);
       getResponse.onsuccess = (event) => {
-        console.log("get event ===", event);
-        resolve(event);
+        console.log("get event ===", event.target);
+        resolve(event.target.result);
       };
       getResponse.onerror = (event) => {
         console.log("get error ===", event);
