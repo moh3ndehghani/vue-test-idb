@@ -137,6 +137,26 @@ class IndexDb {
     });
   }
 
+  getAll(tableName, options = {}) {
+    return new Promise((resolve, reject) => {
+      const transaction = this.database.transaction(
+        tableName,
+        "readonly",
+        options
+      );
+      const store = transaction.objectStore(tableName);
+      const getResponse = store.getAll();
+      getResponse.onsuccess = (event) => {
+        console.log("getAll event ===", event);
+        resolve(event.target.result);
+      };
+      getResponse.onerror = (event) => {
+        console.log("getAll error ===", event);
+        reject(event);
+      };
+    });
+  }
+
   #increaseVersion() {
     this.version = this.version + 1;
     localStorage.setItem(`${this.dbName}-version`, this.version);
