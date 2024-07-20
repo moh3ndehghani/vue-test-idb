@@ -46,23 +46,28 @@ async function add() {
 }
 
 async function remove() {
-  await state.idb.removeData("users", 812);
+  await state.idb.removeData("users", 2);
 }
 
 async function get() {
-  const data = await state.idb.getData("users", 1);
+  const data = await state.idb.getData("users", 2);
   console.log(data);
 }
 
 async function edit() {
   const newData = {
-    username: "d",
+    username: "deeeeee",
     firstName: "m",
     lastName: "d",
-    email: "m@g.com",
+    email: "maaaaaaaaa@g.com",
     id: 2,
   };
   await state.idb.editData("users", newData);
+}
+
+async function getAll() {
+  const data = await state.idb.getAll("users");
+  console.log(data);
 }
 
 onMounted(async () => {
@@ -77,5 +82,7 @@ onMounted(async () => {
     <button @click="remove()">remove record</button>
     <button @click="get()">get data</button>
     <button @click="edit()">update data</button>
+
+    <button @click="getAll()">get all data</button>
   </div>
 </template>
