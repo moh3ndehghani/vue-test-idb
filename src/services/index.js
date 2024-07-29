@@ -157,11 +157,13 @@ export default class IndexDb {
     });
   }
 
-  getWithPagination(tableName, pageSize = 2, page = 1, options = {}) {
+  getWithPagination(tableName, pageSize = 2, page = 2, options = {}) {
     const proccess = (cursor) => {
-      // console.log("cursor exist ===", cursor);
+      // console.log("cursor exist ===", cursor.value);
       cursor.continue();
     };
+    let currentIndex = pageSize * (page - 1);
+    const stopIndex = pageSize * page - 1;
     return new Promise((resolve, reject) => {
       let advanced = false;
       const transaction = this.database.transaction(
@@ -172,8 +174,8 @@ export default class IndexDb {
       const store = transaction.objectStore(tableName);
       store.openCursor().onsuccess = (event) => {
         const cursor = event.target.result;
-        console.log(cursor);
-        if (!cursor) {
+        console.log(cursor.value);
+        if (!cursor || currentIndex > stopIndex) {
           console.log("=== cursor is not exist ===");
           return;
         }
@@ -187,6 +189,7 @@ export default class IndexDb {
             proccess(cursor);
           }
         }
+        currentIndex += 1;
       };
     });
   }
