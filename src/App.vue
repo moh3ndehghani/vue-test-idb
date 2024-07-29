@@ -42,11 +42,12 @@ async function add() {
     firstName: "mohsen",
     lastName: "dehghani",
     email: "msas@g.com",
+    // id: uuidv4()
   });
 }
 
 async function remove() {
-  await state.idb.removeData("users", 2);
+  await state.idb.removeData("users", 5);
 }
 
 async function get() {

@@ -1,4 +1,4 @@
-class IndexDb {
+export default class IndexDb {
   database = null;
   dbName = null;
   version;
@@ -157,8 +157,13 @@ class IndexDb {
     });
   }
 
-  getWithPagination(tableName, pageSize = 50, page = 1, options = {}) {
+  getWithPagination(tableName, pageSize = 2, page = 1, options = {}) {
+    const proccess = (cursor) => {
+      // console.log("cursor exist ===", cursor);
+      cursor.continue();
+    };
     return new Promise((resolve, reject) => {
+      let advanced = false;
       const transaction = this.database.transaction(
         tableName,
         "readonly",
@@ -167,12 +172,20 @@ class IndexDb {
       const store = transaction.objectStore(tableName);
       store.openCursor().onsuccess = (event) => {
         const cursor = event.target.result;
-        if (cursor) {
-          console.log("cursor exist ===", cursor.value.id);
-          cursor.continue();
-        } else {
+        console.log(cursor);
+        if (!cursor) {
           console.log("=== cursor is not exist ===");
           return;
+        }
+        if (advanced) {
+          proccess(cursor);
+        } else {
+          advanced = true;
+          if (page != 1) {
+            cursor.advance(pageSize * (page - 1));
+          } else {
+            proccess(cursor);
+          }
         }
       };
     });
@@ -183,5 +196,3 @@ class IndexDb {
     localStorage.setItem(`${this.dbName}-version`, this.version);
   }
 }
-
-export default IndexDb;
