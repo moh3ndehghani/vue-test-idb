@@ -70,6 +70,10 @@ async function getAll() {
   console.log(data);
 }
 
+async function getWithPagination() {
+  await state.idb.getWithPagination("users")
+}
+
 onMounted(async () => {
   await createDB("test-db");
 });
@@ -84,5 +88,6 @@ onMounted(async () => {
     <button @click="edit()">update data</button>
 
     <button @click="getAll()">get all data</button>
+    <button @click="getWithPagination()">get pagination</button>
   </div>
 </template>

@@ -157,6 +157,27 @@ class IndexDb {
     });
   }
 
+  getWithPagination(tableName, pageSize = 50, page = 1, options = {}) {
+    return new Promise((resolve, reject) => {
+      const transaction = this.database.transaction(
+        tableName,
+        "readonly",
+        options
+      );
+      const store = transaction.objectStore(tableName);
+      store.openCursor().onsuccess = (event) => {
+        const cursor = event.target.result;
+        if (cursor) {
+          console.log("cursor exist ===", cursor.value.id);
+          cursor.continue();
+        } else {
+          console.log("=== cursor is not exist ===");
+          return;
+        }
+      };
+    });
+  }
+
   #increaseVersion() {
     this.version = this.version + 1;
     localStorage.setItem(`${this.dbName}-version`, this.version);
