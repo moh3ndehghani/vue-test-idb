@@ -72,7 +72,9 @@ async function getAll() {
 }
 
 async function getWithPagination() {
-  await state.idb.getWithPagination("users")
+  const data = await state.idb.getWithPagination("users")
+  console.log(data);
+
 }
 
 onMounted(async () => {

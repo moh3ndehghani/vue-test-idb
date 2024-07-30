@@ -157,13 +157,15 @@ export default class IndexDb {
     });
   }
 
-  getWithPagination(tableName, pageSize = 2, page = 2, options = {}) {
-    const proccess = (cursor) => {
-      // console.log("cursor exist ===", cursor.value);
-      cursor.continue();
-    };
+  getWithPagination(tableName, pageSize = 10, page = 1, options = {}) {
+    let data = [];
     let currentIndex = pageSize * (page - 1);
     const stopIndex = pageSize * page - 1;
+    const proccess = (cursor) => {
+      data.push(cursor.value);
+      cursor.continue();
+      currentIndex += 1;
+    };
     return new Promise((resolve, reject) => {
       let advanced = false;
       const transaction = this.database.transaction(
@@ -174,22 +176,19 @@ export default class IndexDb {
       const store = transaction.objectStore(tableName);
       store.openCursor().onsuccess = (event) => {
         const cursor = event.target.result;
-        console.log(cursor.value);
         if (!cursor || currentIndex > stopIndex) {
-          console.log("=== cursor is not exist ===");
-          return;
+          return resolve(data);
         }
         if (advanced) {
           proccess(cursor);
         } else {
           advanced = true;
           if (page != 1) {
-            cursor.advance(pageSize * (page - 1));
+            cursor.advance(currentIndex);
           } else {
             proccess(cursor);
           }
         }
-        currentIndex += 1;
       };
     });
   }
