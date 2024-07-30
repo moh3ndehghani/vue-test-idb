@@ -38,6 +38,20 @@ export default class IndexDb {
     });
   }
 
+  removeDB() {
+    return new Promise((resolve, reject) => {
+      const request = indexedDB.deleteDatabase(this.dbName);
+      request.onsuccess = (event) => {
+        console.log(event.target.result);
+        resolve(request);
+      };
+
+      request.onerror = (event) => {
+        reject(event);
+      };
+    });
+  }
+
   createTable(tableName, tableConfig, columns) {
     return new Promise((resolve, reject) => {
       const objectStore = this.database.createObjectStore(

@@ -36,6 +36,10 @@ async function createDB(dbName) {
   });
 }
 
+async function removeDB() {
+  await state.idb.removeDB()
+}
+
 async function add() {
   await state.idb.insertData("users", {
     username: "mohssednhaagdhsansi",
@@ -85,6 +89,7 @@ onMounted(async () => {
 <template>
   <div>
     <button @click="createDB('test-db')">create db</button>
+    <button @click="removeDB()">remove db</button>
     <button @click="add()">add record</button>
     <button @click="remove()">remove record</button>
     <button @click="get()">get data</button>
