@@ -37,7 +37,16 @@ async function createDB(dbName) {
 }
 
 async function removeDB() {
-  await state.idb.removeDB()
+  // await state.idb.removeDB()
+  const request = indexedDB.deleteDatabase("todo");
+  request.onsuccess = (event) => {
+    console.log(event.target.result);
+    resolve(request);
+  };
+
+  request.onerror = (event) => {
+    reject(event);
+  };
 }
 
 async function add() {
@@ -82,13 +91,13 @@ async function getWithPagination() {
 }
 
 onMounted(async () => {
-  await createDB("test-db");
+  await createDB("todo");
 });
 </script>
 
 <template>
   <div>
-    <button @click="createDB('test-db')">create db</button>
+
     <button @click="removeDB()">remove db</button>
     <button @click="add()">add record</button>
     <button @click="remove()">remove record</button>
