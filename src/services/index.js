@@ -39,13 +39,13 @@ export default class IndexDb {
   }
 
   removeDB() {
+    //we must close it before remove it
+    this.database.close();
     return new Promise((resolve, reject) => {
       const request = indexedDB.deleteDatabase(this.dbName);
       request.onsuccess = (event) => {
-        console.log(event.target.result);
-        resolve(request);
+        resolve();
       };
-
       request.onerror = (event) => {
         reject(event);
       };

@@ -37,16 +37,7 @@ async function createDB(dbName) {
 }
 
 async function removeDB() {
-  // await state.idb.removeDB()
-  const request = indexedDB.deleteDatabase("todo");
-  request.onsuccess = (event) => {
-    console.log(event.target.result);
-    resolve(request);
-  };
-
-  request.onerror = (event) => {
-    reject(event);
-  };
+  await state.idb.removeDB()
 }
 
 async function add() {
