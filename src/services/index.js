@@ -44,6 +44,7 @@ export default class IndexDb {
     return new Promise((resolve, reject) => {
       const request = indexedDB.deleteDatabase(this.dbName);
       request.onsuccess = (event) => {
+        localStorage.removeItem(`${this.dbName}-version`);
         resolve();
       };
       request.onerror = (event) => {
@@ -85,6 +86,31 @@ export default class IndexDb {
       clearTableResponse.onerror = (event) => {
         console.log("error ===", event);
         reject(event);
+      };
+    });
+  }
+
+  removeTable(tableName) {
+    return new Promise((resolve, reject) => {
+      this.database.close();
+      this.increaseVersion();
+
+      const request = indexedDB.open(this.dbName, this.version);
+      request.onerror = (event) => {
+        reject(event.target.error);
+      };
+      request.onsuccess = (event) => {
+        this.database = event.target.result;
+        resolve();
+      };
+      request.onupgradeneeded = (event) => {
+        const db = event.target.result;
+        if (db.objectStoreNames.contains(tableName)) {
+          db.deleteObjectStore(tableName);
+          console.log(`Object store '${tableName}' removed`);
+        } else {
+          console.log(`Object store '${tableName}' does not exist`);
+        }
       };
     });
   }
@@ -227,7 +253,7 @@ export default class IndexDb {
     });
   }
 
-  #increaseVersion() {
+  increaseVersion() {
     this.version = this.version + 1;
     localStorage.setItem(`${this.dbName}-version`, this.version);
   }

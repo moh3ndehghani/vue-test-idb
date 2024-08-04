@@ -86,6 +86,11 @@ async function clearTable() {
   console.log(data);
 }
 
+async function removeTable() {
+  const data = await state.idb.removeTable("users")
+  console.log(state.idb);
+}
+
 onMounted(async () => {
   await createDB("todo");
 });
@@ -102,5 +107,6 @@ onMounted(async () => {
     <button @click="getAll()">get all data</button>
     <button @click="getWithPagination()">get pagination</button>
     <button @click="clearTable()">clear table</button>
+    <button @click="removeTable()">remove table</button>
   </div>
 </template>
