@@ -69,6 +69,26 @@ export default class IndexDb {
     });
   }
 
+  clearTable(tableName, options = {}) {
+    return new Promise((resolve, reject) => {
+      const transaction = this.database.transaction(
+        tableName,
+        "readwrite",
+        options
+      );
+      const store = transaction.objectStore(tableName);
+      const clearTableResponse = store.clear();
+      clearTableResponse.onsuccess = (event) => {
+        console.log("event ===", event);
+        resolve(event.target.result);
+      };
+      clearTableResponse.onerror = (event) => {
+        console.log("error ===", event);
+        reject(event);
+      };
+    });
+  }
+
   insertData(tableName, data, options = {}) {
     return new Promise((resolve, reject) => {
       const transaction = this.database.transaction(

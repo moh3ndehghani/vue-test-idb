@@ -81,6 +81,11 @@ async function getWithPagination() {
 
 }
 
+async function clearTable() {
+  const data = await state.idb.clearTable("users")
+  console.log(data);
+}
+
 onMounted(async () => {
   await createDB("todo");
 });
@@ -94,8 +99,8 @@ onMounted(async () => {
     <button @click="remove()">remove record</button>
     <button @click="get()">get data</button>
     <button @click="edit()">update data</button>
-
     <button @click="getAll()">get all data</button>
     <button @click="getWithPagination()">get pagination</button>
+    <button @click="clearTable()">clear table</button>
   </div>
 </template>
